@@ -1,5 +1,2 @@
 streamlit
-matplotlib
 networkx
-numpy
-reportlab

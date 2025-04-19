@@ -1,30 +1,64 @@
-import streamlit as st
-from functions import criar_arvore_elementos, gerar_mapa_astral
 import networkx as nx
 
-def main():
-    st.title('Simetria dos Signos')
-    st.write('Bem-vindo ao aplicativo de simetria dos signos!')
+def criar_arvore_elementos():
+    G = nx.Graph()
+    G.add_nodes_from(['Fogo', 'Terra', 'Ar', 'Água'])
+    G.add_edges_from([
+        ('Fogo', 'Terra'),
+        ('Terra', 'Ar'),
+        ('Ar', 'Água'),
+        ('Água', 'Fogo')
+    ])
+    return G
 
-    nome = st.text_input("Digite seu nome:")
+SIGNO_DESCRICOES = {
+    "Áries": "Impulsivo, corajoso, cheio de energia e iniciativa.",
+    "Touro": "Paciente, determinado, amante do conforto e da estabilidade.",
+    "Gêmeos": "Curioso, comunicativo, versátil e adaptável.",
+    "Câncer": "Sensível, protetor, apegado ao lar e à família.",
+    "Leão": "Confiante, carismático, gosta de ser o centro das atenções.",
+    "Virgem": "Detalhista, prático, organizado e analítico.",
+    "Libra": "Diplomático, sociável, busca equilíbrio e harmonia.",
+    "Escorpião": "Intenso, emocional, determinado e misterioso.",
+    "Sagitário": "Aventureiro, otimista, amante da liberdade e do conhecimento.",
+    "Capricórnio": "Responsável, disciplinado, ambicioso e prático.",
+    "Aquário": "Inovador, independente, idealista e visionário.",
+    "Peixes": "Sonhador, empático, sensível e criativo.",
+    "Desconhecido": "Não foi possível identificar o signo com os dados fornecidos."
+}
 
-    # Campos separados para data de nascimento
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        dia = st.number_input("Dia", min_value=1, max_value=31, step=1)
-    with col2:
-        mes = st.number_input("Mês", min_value=1, max_value=12, step=1)
-    with col3:
-        ano = st.number_input("Ano", min_value=1900, max_value=2100, step=1)
+def descobrir_signo(dia, mes):
+    if (mes == 3 and dia >= 21) or (mes == 4 and dia <= 19):
+        return "Áries"
+    elif (mes == 4 and dia >= 20) or (mes == 5 and dia <= 20):
+        return "Touro"
+    elif (mes == 5 and dia >= 21) or (mes == 6 and dia <= 20):
+        return "Gêmeos"
+    elif (mes == 6 and dia >= 21) or (mes == 7 and dia <= 22):
+        return "Câncer"
+    elif (mes == 7 and dia >= 23) or (mes == 8 and dia <= 22):
+        return "Leão"
+    elif (mes == 8 and dia >= 23) or (mes == 9 and dia <= 22):
+        return "Virgem"
+    elif (mes == 9 and dia >= 23) or (mes == 10 and dia <= 22):
+        return "Libra"
+    elif (mes == 10 and dia >= 23) or (mes == 11 and dia <= 21):
+        return "Escorpião"
+    elif (mes == 11 and dia >= 22) or (mes == 12 and dia <= 21):
+        return "Sagitário"
+    elif (mes == 12 and dia >= 22) or (mes == 1 and dia <= 19):
+        return "Capricórnio"
+    elif (mes == 1 and dia >= 20) or (mes == 2 and dia <= 18):
+        return "Aquário"
+    elif (mes == 2 and dia >= 19) or (mes == 3 and dia <= 20):
+        return "Peixes"
+    return "Desconhecido"
 
-    if nome and dia and mes and ano:
-        data_nascimento = f"{int(dia):02d}/{int(mes):02d}/{int(ano)}"
-        mapa_astral = gerar_mapa_astral(nome, data_nascimento)
-        st.write(mapa_astral)
-
-        # Gerar e exibir árvore dos elementos
-        G = criar_arvore_elementos()
-        st.write("Árvore dos Elementos:", G.nodes)
-
-if __name__ == "__main__":
-    main()
+def gerar_mapa_astral(nome, data_nascimento):
+    try:
+        dia, mes, ano = map(int, data_nascimento.split("/"))
+        signo = descobrir_signo(dia, mes)
+    except:
+        signo = "Desconhecido"
+    descricao = SIGNO_DESCRICOES.get(signo, "Descrição não disponível.")
+    return f"Mapa Astral de {nome}\nData de Nascimento: {data_nascimento}\nSigno solar estimado: {signo}\nDescrição: {descricao}"
