@@ -60,5 +60,18 @@ def gerar_mapa_astral(nome, data_nascimento):
         signo = descobrir_signo(dia, mes)
     except:
         signo = "Desconhecido"
+
+    ascendente = signo  # Simulação
+    lua = signo          # Simulação
+    jupiter = signo      # Simulação
+
     descricao = SIGNO_DESCRICOES.get(signo, "Descrição não disponível.")
-    return f"Mapa Astral de {nome}\nData de Nascimento: {data_nascimento}\nSigno solar estimado: {signo}\nDescrição: {descricao}"
+    return (
+        f"Mapa Astral de {nome}\n"
+        f"Data de Nascimento: {data_nascimento}\n"
+        f"Signo Solar: {signo}\n"
+        f"Ascendente: {ascendente}\n"
+        f"Lua: {lua}\n"
+        f"Júpiter: {jupiter}\n"
+        f"Descrição: {descricao}"
+    )
